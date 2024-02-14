@@ -7,16 +7,29 @@ def main(page: ft.Page):
     page.window_maximizable = True
     page.title = 'Calculadora'
 
+    def get_data(e):
+        resultado_at = resultado.value if resultado.value != '0' else ''
+        data = e.control.data
+        if data in ('0','1','2','3','4','5','6','7','8','9'):
+            data = resultado_at + data
+        
+        else:
+            if resultado_at and resultado_at[:-1] in ('+','-','*','/','.'):
+                data = resultado_at[:-1]
+        
+            if data[-1] in ('=','%','+/-'):
+                data = calculo(data = data[-1], resultado_at = resultado_at)
+            
+        resultado.value = data
+        page.update()
 
     def clear(e):
         resultado.value = ''
         page.update()
-            
-    def get_data(e):
-        data = e.control.data
-        if data in ['0','1','2','3','4','5','6','7','8','9']:
-            resultado.value += data
-            page.update()
+    
+    def calculo(data, resultado_at):
+        data = eval(resultado_at)
+        return data
 
     page.add(
         
